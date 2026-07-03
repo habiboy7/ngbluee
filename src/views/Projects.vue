@@ -112,64 +112,6 @@ const router = useRouter()
 const loading = ref(true)
 const allProjects = ref([])
 
-// Predefined Mock Projects 
-const mockProjects = [
-  {
-    id: 'mock-1',
-    title: 'Web Design',
-    category: 'Web',
-    tagline: 'Premium custom web designs focused on immersive storytelling and aesthetic typography.',
-    description: 'A deep dive into high-end web layout engineering, visual typography hierarchy, and precise alignment. We crafted an immersive narrative experience that tells the brand story through elegant interactions, fluid animations, and custom UI design tokens.',
-    role: 'Lead Web Designer',
-    year: '2025',
-    tech: ['Figma', 'HTML5', 'CSS Grid', 'GSAP', 'Typography.js'],
-    image_url: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=600&auto=format&fit=crop'
-  },
-  {
-    id: 'mock-2',
-    title: 'UI/UX Design',
-    category: 'UI/UX',
-    tagline: 'User-centered wireframes, mockups and interactive user flows built for modern apps.',
-    description: 'Designed from research to production, this app interfaces high-complexity user flows with a clean, grid-aligned layout. Includes a comprehensive Figma library setup, visual design guides, usability reports, and a dark-mode optimized design token schema.',
-    role: 'UI/UX Researcher & Designer',
-    year: '2025',
-    tech: ['Figma', 'FigJam', 'Prototyping', 'Usability Testing'],
-    image_url: 'https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?q=80&w=600&auto=format&fit=crop'
-  },
-  {
-    id: 'mock-3',
-    title: 'Creative Design',
-    category: 'UI/UX',
-    tagline: 'Crafting brand assets, layouts, and unique visual elements for high-impact presence.',
-    description: 'Visual identity construction for modern digital-native brands. We established unique art directions, custom packaging elements, responsive typography libraries, and unified vector guidelines to provide an unforgettable presence across web, mobile, print, and retail.',
-    role: 'Art Director',
-    year: '2025',
-    tech: ['Adobe Illustrator', 'Photoshop', 'Indesign', 'Branding'],
-    image_url: 'https://images.unsplash.com/photo-1541462608141-2ff580dd0e4e?q=80&w=600&auto=format&fit=crop'
-  },
-  {
-    id: 'mock-4',
-    title: 'Product & App Design',
-    category: 'Mobile',
-    tagline: 'Product and app design focused on simplicity, consistency, and growth – crafted to deliver the best digital solutions.',
-    description: 'A mobile product design system optimized for iOS and Android platforms. Built with heavy focus on clean, human-centered UI patterns, consistent spacing rules, native behavior adaptations, and high-performance animation guidelines.',
-    role: 'Senior Product Designer',
-    year: '2025',
-    tech: ['Figma', 'SwiftUI Mockups', 'Human Interface Guidelines', 'Material 3'],
-    image_url: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=600&auto=format&fit=crop'
-  },
-  {
-    id: 'mock-5',
-    title: 'Development',
-    category: 'Web',
-    tagline: 'Responsive and robust coding solutions utilizing modern frameworks and performance-tuned APIs.',
-    description: 'Clean-code software development integrating Vue 3 composition API with custom backend nodes. High-performance, search engine optimized architecture utilizing modern build tools and lightweight animations to deliver near-instant load speeds.',
-    role: 'Lead Developer',
-    year: '2025',
-    tech: ['Vue 3', 'Vite', 'Tailwind CSS', 'Supabase', 'Node.js'],
-    image_url: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=600&auto=format&fit=crop'
-  }
-]
 
 // Fetch projects from Supabase
 const fetchProjects = async () => {
@@ -190,19 +132,8 @@ const fetchProjects = async () => {
   }
 }
 
-// Combine database projects and mock projects 
 const displayProjects = computed(() => {
-  const list = [...allProjects.value]
-  
-  // Append mock projects 
-  mockProjects.forEach((mock) => {
-    const isRepresented = list.some((p) => p.title.toLowerCase() === mock.title.toLowerCase())
-    if (!isRepresented) {
-      list.push(mock)
-    }
-  })
-  
-  return list
+  return allProjects.value
 })
 
 // Safe tech tag extractor
@@ -242,16 +173,6 @@ const slugify = (text) => {
 }
 
 const getSlug = (project) => {
-  if (project.id && project.id.startsWith('mock-')) {
-    const slugMap = {
-      'mock-1': 'web-design',
-      'mock-2': 'ui-ux-design',
-      'mock-3': 'creative-design',
-      'mock-4': 'product-app-design',
-      'mock-5': 'development'
-    }
-    return slugMap[project.id] || project.id
-  }
   return slugify(project.title)
 }
 

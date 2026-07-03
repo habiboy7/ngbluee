@@ -328,76 +328,6 @@ watch(activeIndex, (newIdx, oldIdx) => {
   }
 })
 
-const mockProjects = [
-  {
-    id: 'mock-1',
-    title: 'Web Design',
-    category: 'Web',
-    tagline:
-      'Premium custom web designs focused on immersive storytelling and aesthetic typography.',
-    features: [
-      'Layout Design',
-      'Typography Systems',
-      'Interactive Prototypes',
-      'Micro-interactions',
-    ],
-    image_url:
-      'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=600&auto=format&fit=crop',
-    year: '2025',
-  },
-  {
-    id: 'mock-2',
-    title: 'UI/UX Design',
-    category: 'UI/UX',
-    tagline: 'User-centered wireframes, mockups and interactive user flows built for modern apps.',
-    features: [
-      'Figma Design Systems',
-      'User Journey Mapping',
-      'High-Fi Prototyping',
-      'Usability Testing',
-    ],
-    image_url:
-      'https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?q=80&w=600&auto=format&fit=crop',
-    year: '2025',
-  },
-  {
-    id: 'mock-3',
-    title: 'Creative Design',
-    category: 'UI/UX',
-    tagline: 'Crafting brand assets, layouts, and unique visual elements for high-impact presence.',
-    features: [
-      'Brand Guidelines',
-      'Creative Art Direction',
-      'Vector Asset Sets',
-      'Visual Identity Design',
-    ],
-    image_url:
-      'https://images.unsplash.com/photo-1541462608141-2ff580dd0e4e?q=80&w=600&auto=format&fit=crop',
-    year: '2025',
-  },
-  {
-    id: 'mock-4',
-    title: 'Product & App Design',
-    category: 'Mobile',
-    tagline:
-      'Product and app design focused on simplicity, consistency, and growth – crafted to deliver the best digital solutions.',
-    features: ['Mobile & Web Apps', 'Design Systems', 'Complex Interactions', 'Scalable Solutions'],
-    image_url:
-      'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=600&auto=format&fit=crop',
-    year: '2025',
-  },
-  {
-    id: 'mock-5',
-    title: 'Development',
-    category: 'Web',
-    tagline:
-      'Responsive and robust coding solutions utilizing modern frameworks and performance-tuned APIs.',
-    features: ['Vue 3 & React', 'RESTful API Integration', 'Performance Tuning', 'SEO & Semantics'],
-    image_url:
-      'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=600&auto=format&fit=crop',
-    year: '2025',
-  },
-]
 
 const fetchProjects = async () => {
   try {
@@ -420,15 +350,6 @@ const displayProjects = computed(() => {
   if (projects.length < 5) {
     const spaceLeft = 5 - projects.length
     projects.push(...nonFavorites.slice(0, spaceLeft))
-  }
-
-  if (projects.length < 5) {
-    const needed = 5 - projects.length
-    const availableMocks = mockProjects.filter(
-      (mock) => !projects.some((p) => p.title.toLowerCase() === mock.title.toLowerCase()),
-    )
-    const fill = availableMocks.length >= needed ? availableMocks : mockProjects
-    projects.push(...fill.slice(0, needed))
   }
 
   return projects.slice(0, 5)
@@ -455,16 +376,6 @@ const slugify = (text) => {
 }
 
 const getSlug = (project) => {
-  if (project.id && project.id.startsWith('mock-')) {
-    const slugMap = {
-      'mock-1': 'web-design',
-      'mock-2': 'ui-ux-design',
-      'mock-3': 'creative-design',
-      'mock-4': 'product-app-design',
-      'mock-5': 'development'
-    }
-    return slugMap[project.id] || project.id
-  }
   return slugify(project.title)
 }
 
@@ -495,16 +406,24 @@ const onMouseMove = (event) => {
 
   const relativeX = event.clientX - cachedWrapperRect.left
 
+  const N = displayProjects.value.length
+  if (N === 0) return
+
   // Calculate dynamic boundaries based on current activeIndex
   const boundaries = []
   let accumulatedFraction = 0
+  const totalFlex = activeIndex.value === null
+    ? N
+    : 2.4 + (N - 1) * 0.65
 
-  for (let i = 0; i < 5; i++) {
-    let fraction = 0.13
+  for (let i = 0; i < N; i++) {
+    let fraction
     if (activeIndex.value === null) {
-      fraction = 0.20
+      fraction = 1 / N
     } else if (activeIndex.value === i) {
-      fraction = 0.48
+      fraction = 2.4 / totalFlex
+    } else {
+      fraction = 0.65 / totalFlex
     }
     accumulatedFraction += fraction
     boundaries.push(accumulatedFraction * cachedWrapperRect.width)
@@ -512,7 +431,7 @@ const onMouseMove = (event) => {
 
   // Find which column relativeX falls into
   let newIndex = 0
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < N; i++) {
     if (relativeX <= boundaries[i]) {
       newIndex = i
       break
