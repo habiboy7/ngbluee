@@ -155,7 +155,7 @@
           <!-- CV Button at the bottom -->
           <div class="flex justify-center mt-6">
             <a
-              href="https://drive.google.com/file/d/1zXjdbc8r4496iaocyA_1pfTuukwt67AR/view?usp=sharing"
+              href="https://drive.google.com/file/d/1neWSF-t7mZfBjjaEo_O3kXsiyhJpMtJ-/view?usp=sharing"
               target="_blank"
               rel="noopener noreferrer"
               class="group/btn relative inline-flex items-center justify-center gap-2 px-16 py-2.5 bg-white rounded-full text-xs sm:text-base text-black shadow-lg hover:scale-[1.02] hover:bg-black hover:text-white border hover:border-white transition-all duration-300 w-fit"
